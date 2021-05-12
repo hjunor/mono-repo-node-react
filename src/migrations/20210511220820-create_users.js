@@ -4,7 +4,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.createTable("users", {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV1,
@@ -13,15 +13,21 @@ module.exports = {
       username: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
       },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
-        unicode: true,
+        unique: true,
       },
       password: {
         type: Sequelize.STRING,
         allowNull: false,
+      },
+      cpf: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
       },
       provider: {
         type: Sequelize.BOOLEAN,

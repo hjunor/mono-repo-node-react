@@ -6,7 +6,7 @@ const User = database.define(
   "users",
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV1,
@@ -15,7 +15,7 @@ const User = database.define(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unicode: true,
+      unique: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -24,6 +24,11 @@ const User = database.define(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    cpf: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
     },
     provider: {
       type: DataTypes.BOOLEAN,
@@ -41,6 +46,10 @@ User.prototype.toJSON = function () {
   const values = { ...this.get() };
   delete values.password;
   delete values.provider;
+  delete values.cpf;
+  delete values.id;
+  delete values.createdAt;
+  delete values.updatedAt;
   return values;
 };
 

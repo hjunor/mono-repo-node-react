@@ -18,8 +18,6 @@ const getTokenFromHeaders = (headers) => {
 };
 module.exports = {
   generateJwt,
-  generateRefreshJwt,
   verifyJwt,
-  verifyRefreshJwt,
   getTokenFromHeaders,
 };
