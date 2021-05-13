@@ -50,7 +50,7 @@ module.exports = {
         allowNull: false,
         references: {
           // User belongsTo Company 1:1
-          model: "Bankinfo",
+          model: "bankinfo",
           key: "id",
         },
       },

@@ -1,5 +1,6 @@
 const User = require("../models/Users");
 const Biography = require("../models/Biography");
+const Bankinfo = require("../models/Bankinfo");
 const bcrypt = require("bcrypt");
 const { generateJwt } = require("../helpers/jwt");
 
@@ -18,18 +19,21 @@ class Auth {
       }
       const hash = bcrypt.hashSync(password, rounds);
 
-      const { id } = await Biography.create();
+      const bio = await Biography.create();
+      const bank = await Bankinfo.create();
 
+      console.log(bank);
       const user = await User.create({
         username,
         email,
         password: hash,
         cpf,
-        biographyId: id,
+        biographyId: bio.id,
+        bankinfoId: bank.id,
       });
       const token = generateJwt({ id: user.id });
 
-      return res.status(201).json({ data: user, token });
+      return res.status(201).json({ data: { user, token, bank, bio } });
     } catch (error) {
       return res.status(500).json({ message: "error server" });
     }
