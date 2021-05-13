@@ -34,6 +34,26 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
+      biographyId: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV1,
+        allowNull: false,
+        references: {
+          // User belongsTo Company 1:1
+          model: "Biography",
+          key: "id",
+        },
+      },
+      bankinfoId: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV1,
+        allowNull: false,
+        references: {
+          // User belongsTo Company 1:1
+          model: "Bankinfo",
+          key: "id",
+        },
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

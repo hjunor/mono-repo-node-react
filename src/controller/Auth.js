@@ -1,4 +1,5 @@
 const User = require("../models/Users");
+const Biography = require("../models/Biography");
 const bcrypt = require("bcrypt");
 const { generateJwt } = require("../helpers/jwt");
 
@@ -17,11 +18,14 @@ class Auth {
       }
       const hash = bcrypt.hashSync(password, rounds);
 
+      const { id } = await Biography.create();
+
       const user = await User.create({
         username,
         email,
         password: hash,
         cpf,
+        biographyId: id,
       });
       const token = generateJwt({ id: user.id });
 

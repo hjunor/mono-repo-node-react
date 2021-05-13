@@ -14,27 +14,23 @@ const User = database.define(
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     cpf: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
     },
     provider: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
       defaultValue: false,
+      allowNull: false,
     },
+    biographyId: DataTypes.UUID,
+    bankinfoId: DataTypes.UUID,
   },
   {
     database,
@@ -51,6 +47,17 @@ User.prototype.toJSON = function () {
   delete values.createdAt;
   delete values.updatedAt;
   return values;
+};
+
+User.associate = function (models) {
+  User.belongsTo(models.Biography, {
+    foreignKey: "bankinfoId",
+    as: "bankinfo",
+  });
+  User.belongsTo(models.Biography, {
+    foreignKey: "biographyId",
+    as: "biography",
+  });
 };
 
 module.exports = User;
