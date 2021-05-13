@@ -9,6 +9,10 @@ app.use(
   "/uploads",
   express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
 );
+app.use(
+  "/profile",
+  express.static(path.resolve(__dirname, "..", "tmp", "profile"))
+);
 
 app.use(express.json());
 app.use(router);

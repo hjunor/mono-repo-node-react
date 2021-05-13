@@ -1,17 +1,24 @@
-const config = require("./config/multer");
-const Auth = require("./controller/Auth");
+const multerProfile = require("./config/multer-profile");
+const multerUpload = require("./config/multer-upload");
+const AuthController = require("./controller/Auth");
 const checkJwt = require("./middlewares/jwt");
 const router = require("express").Router();
 const multer = require("multer");
 
 const { accountSingUp, accountSingIn } = require("./validators/user");
+const BiographyController = require("./controller/Biography");
+const BankController = require("./controller/Bank");
 
-router.post("/sign-up", accountSingUp, Auth.create);
-router.get("/", checkJwt, Auth.store);
-router.post("/login", accountSingIn, Auth.index);
-router.post("/file", multer(config).single("file"), (req, res) => {
-  const file = req.file.filename;
-  console.log(file);
-  return res.json("ok");
-});
+router.post("/sign-up", accountSingUp, AuthController.create);
+router.get("/", checkJwt, AuthController.store);
+router.post("/login", accountSingIn, AuthController.index);
+
+router.post("/bank", checkJwt, BankController.update);
+router.post(
+  "/biography",
+  checkJwt,
+  multer(multerProfile).single("file"),
+  BiographyController.update
+);
+
 module.exports = router;
