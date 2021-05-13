@@ -3,7 +3,7 @@ const { DataTypes } = require("sequelize");
 const database = require("../config/db");
 
 const Biography = database.define(
-  "biography",
+  "biographies",
   {
     id: {
       type: DataTypes.STRING,
@@ -35,7 +35,7 @@ const Biography = database.define(
   },
   {
     database,
-    modelName: "biography",
+    modelName: "biographies",
   }
 );
 
@@ -43,10 +43,12 @@ Biography.prototype.toJSON = function () {
   const values = { ...this.get() };
   delete values.createdAt;
   delete values.updatedAt;
+  delete values.id;
+
   return values;
 };
 Biography.associate = function (models) {
-  Biography.hasMany(models.User, { as: "employes" });
+  Biography.hasMany(models.User, { as: "biography" });
 };
 
 module.exports = Biography;

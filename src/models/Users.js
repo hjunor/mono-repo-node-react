@@ -44,6 +44,8 @@ User.prototype.toJSON = function () {
   delete values.provider;
   delete values.cpf;
   delete values.id;
+  delete values.biographyId;
+  delete values.bankinfoId;
   delete values.createdAt;
   delete values.updatedAt;
   return values;
