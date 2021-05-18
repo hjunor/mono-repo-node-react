@@ -1,19 +1,19 @@
-const Bankinfo = require("../models/Bankinfo");
-const User = require("../models/Users");
+const Bankinfo = require('../models/Bankinfo');
+const User = require('../models/Users');
 
 class BankinfoController {
   async update(req, res) {
     try {
       const { id, body } = req;
 
-      const fields = ["name", "type", "agency", "account", "owner", "doc"];
+      const fields = ['name', 'type', 'agency', 'account', 'owner', 'doc'];
 
       const { bankinfoId } = await User.findOne({ id });
 
       const bank = await Bankinfo.findOne({ bankinfoId });
 
       if (!bank)
-        return res.status(400).json({ message: "Biografia não encontrada." });
+        return res.status(400).json({ message: 'Biografia não encontrada.' });
 
       fields.map((fildName) => {
         const newValue = body[fildName];
@@ -26,7 +26,7 @@ class BankinfoController {
 
       return res.json({ bank });
     } catch (error) {
-      return res.status(500).json({ exti: "error Servidor" });
+      return res.status(500).json({ exti: 'error Servidor' });
     }
   }
 }

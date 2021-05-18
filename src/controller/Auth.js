@@ -1,8 +1,9 @@
-const User = require("../models/Users");
-const Biography = require("../models/Biography");
-const Bankinfo = require("../models/Bankinfo");
-const bcrypt = require("bcrypt");
-const { generateJwt } = require("../helpers/jwt");
+const User = require('../models/Users');
+const Biography = require('../models/Biography');
+const Bankinfo = require('../models/Bankinfo');
+const bcrypt = require('bcrypt');
+const { generateJwt } = require('../helpers/jwt');
+const { isCpf } = require('iscpf');
 
 const rounds = 10;
 
@@ -11,16 +12,19 @@ class AuthController {
     try {
       const { username, email, password, cpf } = req.body;
 
+      if (isCpf('10785415661')) {
+        return res.status(400).json({ message: 'CPF invalido' });
+      }
+
       const userExist = await User.findOne({ where: { email } });
 
       if (!!userExist) {
-        return res.status(400).json({ message: "Usuário ja cadastrado." });
+        return res.status(400).json({ message: 'Usuário ja cadastrado.' });
       }
       const hash = bcrypt.hashSync(password, rounds);
 
       const bio = await Biography.create();
       const bank = await Bankinfo.create();
-      console.log(bank);
       const user = await User.create({
         username,
         email,
@@ -33,7 +37,7 @@ class AuthController {
 
       return res.status(201).json({ data: { user, token, bank, bio } });
     } catch (error) {
-      return res.status(500).json({ message: "error server" });
+      return res.status(500).json({ message: 'error server' });
     }
   }
   async index(req, res) {
@@ -42,7 +46,7 @@ class AuthController {
       const user = await User.findOne({ where: { email } });
 
       if (!user) {
-        return res.status(400).json({ message: "Usuário não cadastrado." });
+        return res.status(400).json({ message: 'Usuário não cadastrado.' });
       }
 
       const { bankinfoId, biographyId } = user;
@@ -53,7 +57,7 @@ class AuthController {
       const match = user ? bcrypt.compareSync(password, user.password) : null;
 
       if (!match) {
-        return res.status(400).json({ message: "Senha incorreta" });
+        return res.status(400).json({ message: 'Senha incorreta' });
       }
       const token = generateJwt({
         id: user.id,
@@ -63,17 +67,16 @@ class AuthController {
 
       return res.status(201).json({ data: { user, token, biography, bank } });
     } catch (error) {
-      return res.status(500).json({ message: "error server" });
+      return res.status(500).json({ message: 'error server' });
     }
   }
-
   async store(req, res) {
     try {
       const { id } = req;
       const users = await User.findOne({ where: { id } });
       return res.status(200).json(users);
     } catch (error) {
-      return res.status(500).json({ message: "error server" });
+      return res.status(500).json({ message: 'error server' });
     }
   }
 }

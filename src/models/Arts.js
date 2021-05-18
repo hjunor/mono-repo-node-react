@@ -1,10 +1,17 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
-const database = require("../config/db");
+const database = require('../config/db');
 
 const Arts = database.define(
-  "arts",
+  'arts',
   {
+    id: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV1,
+      primaryKey: true,
+    },
     userId: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV1,
@@ -32,20 +39,19 @@ const Arts = database.define(
   },
   {
     database,
-    modelName: "arts",
-  }
+    modelName: 'arts',
+  },
 );
 
 Arts.prototype.toJSON = function () {
   const values = { ...this.get() };
   delete values.createdAt;
   delete values.updatedAt;
-  delete values.id;
 
   return values;
 };
 Arts.associate = (models) => {
-  Arts.belongsTo(models.User, { foreignKey: "userId" });
+  Arts.belongsTo(models.User, { foreignKey: 'userId' });
 };
 
 module.exports = Arts;

@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.createTable("arts", {
+    return queryInterface.createTable('arts', {
       id: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -15,8 +15,8 @@ module.exports = {
         defaultValue: Sequelize.UUIDV1,
         allowNull: false,
         references: {
-          model: "users",
-          key: "id",
+          model: 'users',
+          key: 'id',
         },
       },
       image: {
@@ -55,6 +55,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("arts");
+    return queryInterface.dropTable('arts');
   },
 };

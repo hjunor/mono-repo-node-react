@@ -51,6 +51,9 @@ User.prototype.toJSON = function () {
   return values;
 };
 
+User.associate = (models) => {
+  User.hasMany(models.Arts, { foreignKey: "userId" });
+};
 User.associate = function (models) {
   User.belongsTo(models.Biography, {
     foreignKey: "bankinfoId",
