@@ -12,14 +12,18 @@ class AuthController {
     try {
       const { username, email, password, cpf } = req.body;
 
-      if (isCpf('10785415661')) {
-        return res.status(400).json({ message: 'CPF invalido' });
+      if (!isCpf(cpf)) {
+        return res.status(400).json({ error: { message: 'CPF invalido' } });
       }
+
+      const cpfExist = await User.findOne({ where: { cpf } });
 
       const userExist = await User.findOne({ where: { email } });
 
-      if (!!userExist) {
-        return res.status(400).json({ message: 'Usuário ja cadastrado.' });
+      if (!!userExist || cpfExist) {
+        return res
+          .status(400)
+          .json({ error: { message: 'Usuário ja cadastrado.' } });
       }
       const hash = bcrypt.hashSync(password, rounds);
 
@@ -37,7 +41,7 @@ class AuthController {
 
       return res.status(201).json({ data: { user, token, bank, bio } });
     } catch (error) {
-      return res.status(500).json({ message: 'error server' });
+      return res.status(500).json({ error: { message: 'error server' } });
     }
   }
   async index(req, res) {
@@ -46,7 +50,9 @@ class AuthController {
       const user = await User.findOne({ where: { email } });
 
       if (!user) {
-        return res.status(400).json({ message: 'Usuário não cadastrado.' });
+        return res
+          .status(400)
+          .json({ error: { message: 'Usuário não cadastrado.' } });
       }
 
       const { bankinfoId, biographyId } = user;
@@ -57,26 +63,27 @@ class AuthController {
       const match = user ? bcrypt.compareSync(password, user.password) : null;
 
       if (!match) {
-        return res.status(400).json({ message: 'Senha incorreta' });
+        return res.status(400).json({ error: { message: 'Senha incorreta' } });
       }
+
       const token = generateJwt({
         id: user.id,
         biography: biography.id,
         bank: bank.id,
       });
 
-      return res.status(201).json({ data: { user, token, biography, bank } });
+      return res.status(200).json({ data: { user, token, biography, bank } });
     } catch (error) {
-      return res.status(500).json({ message: 'error server' });
+      return res.status(500).json({ error: { message: 'error server' } });
     }
   }
   async store(req, res) {
     try {
       const { id } = req;
       const users = await User.findOne({ where: { id } });
-      return res.status(200).json(users);
+      return res.status(200).json({ data: { users } });
     } catch (error) {
-      return res.status(500).json({ message: 'error server' });
+      return res.status(500).json({ error: { message: 'error server' } });
     }
   }
 }

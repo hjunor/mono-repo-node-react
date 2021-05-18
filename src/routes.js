@@ -16,6 +16,7 @@ router.post('/login', accountSingIn, AuthController.index);
 
 router.get('/arts', checkJwt, ArtsController.indexAll);
 router.get('/arts/:id', checkJwt, ArtsController.index);
+router.delete('/arts/:id', checkJwt, ArtsController.destroy);
 router.put(
   '/arts/:id',
   multer(multerUpload).single('file'),

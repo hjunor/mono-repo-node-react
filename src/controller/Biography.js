@@ -44,7 +44,8 @@ class BiographyController {
       await bio.save();
 
       bio.photo = `http://localhost:3003/profile/${bio.photo}`;
-      return res.json({ bio });
+
+      return res.json({ data: { bio } });
     } catch (error) {
       const file = await fileDelete(req.file.filename);
 

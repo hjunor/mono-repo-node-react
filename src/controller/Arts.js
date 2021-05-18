@@ -13,12 +13,14 @@ class ArtsContoller {
       const user = await User.findOne({ id });
 
       if (!user) {
-        return res.status(400).json({ message: 'Usuário não encontrado.' });
+        return res
+          .status(400)
+          .json({ error: { message: 'Usuário não encontrado.' } });
       }
 
       const art = await Arts.create({
         userId: user.id,
-        image: `http://localhost:3003/uploads/${image}`,
+        image,
         name,
         types,
         exclusivity: !!exclusivity,
@@ -27,13 +29,17 @@ class ArtsContoller {
       if (!art) {
         return res
           .status(400)
-          .json({ message: 'Não foi possivel adicionar Arte.' });
+          .json({ error: { message: 'Não foi possivel adicionar Arte.' } });
       }
+      art.image = `http://localhost:3003/uploads/${art.image}`;
+
       return res.json({
-        art,
+        data: {
+          art,
+        },
       });
     } catch (error) {
-      return res.status(500).json({ error: 'error no Servidor', px: error });
+      return res.status(500).json({ error: { message: 'error no Servidor' } });
     }
   }
   async indexAll(req, res) {
@@ -44,12 +50,18 @@ class ArtsContoller {
     if (!user) {
       return res
         .status(400)
-        .json({ message: 'Arts de usuário não encontrado.' });
+        .json({ error: { message: 'Arts de usuário não encontrado.' } });
     }
 
     const arts = await Arts.findAll({ where: { userId: id } });
 
-    return res.json({ data: { arts } });
+    const artsFile = arts.map((art) => {
+      art.image = `http://localhost:3003/uploads/${art.image}`;
+
+      return art;
+    });
+
+    return res.json({ data: { artsFile } });
   }
   async index(req, res) {
     const { id: artsId } = req.params;
@@ -59,10 +71,17 @@ class ArtsContoller {
     if (!user) {
       return res
         .status(400)
-        .json({ message: ' Arts de usuário não encontrado.' });
+        .json({ error: { message: ' Arts de usuário não encontrado.' } });
     }
 
     const art = await Arts.findOne({ where: { id: artsId } });
+
+    if (!art) {
+      return res
+        .status(400)
+        .json({ error: { message: ' Arts de usuário não encontrado.' } });
+    }
+    art.image = `http://localhost:3003/uploads/${art.image}`;
 
     return res.json({ data: { art } });
   }
@@ -80,18 +99,18 @@ class ArtsContoller {
       const art = await Arts.findOne({ id });
 
       if (!art)
-        return res
-          .status(400)
-          .json({ message: 'Não foi possivel fazer essa alteração.' });
+        return res.status(400).json({
+          error: { message: 'Não foi possivel fazer essa alteração.' },
+        });
 
       body.image = filename;
 
       const file = fileDelete(art.image);
 
       if (!file)
-        return res
-          .status(400)
-          .json({ message: 'Não foi possivel fazer essa alteração.' });
+        return res.status(400).json({
+          error: { message: 'Não foi possivel fazer essa alteração.' },
+        });
 
       fields.map((fildName) => {
         const newValue = body[fildName];
@@ -109,20 +128,31 @@ class ArtsContoller {
       const file = await fileDelete(req.file.filename);
 
       if (!file) {
-        return res.status(500).json({ error: 'error no Servidor' });
+        return res
+          .status(500)
+          .json({ error: { message: 'error no Servidor' } });
       }
-      return res.status(500).json({ error: 'error no Servidor' });
+      return res.status(500).json({ error: { message: 'error no Servidor' } });
     }
   }
   async destroy(req, res) {
-    // const { id  } = req.params;
-    // if (!user) {
-    //   return res
-    //     .status(400)
-    //     .json({ message: ' Arts de usuário não encontrado.' });
-    // }
-    // const art = await Arts.findOne({ where: { id } });
-    // return res.json({ data: { art } });
+    try {
+      const { id } = req.params;
+      const art = await Arts.findOne({ where: { id } });
+      const file = await fileDelete(art.image);
+
+      if (!art && file) {
+        return res
+          .status(400)
+          .json({ message: ' Arts de usuário não deletada.' });
+      }
+
+      await Arts.destroy({ where: { id } });
+
+      return res.json({ data: { destroy: true } });
+    } catch (error) {
+      return res.status(500).json({ error: { message: 'error no Servidor' } });
+    }
   }
 }
 
