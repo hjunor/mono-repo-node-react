@@ -4,6 +4,7 @@ const Bankinfo = require('../models/Bankinfo');
 const bcrypt = require('bcrypt');
 const { generateJwt } = require('../helpers/jwt');
 const { isCpf } = require('iscpf');
+const sendMail = require('../helpers/email');
 
 const rounds = 10;
 
@@ -17,13 +18,15 @@ class AuthController {
       }
 
       const cpfExist = await User.findOne({ where: { cpf } });
-
       const userExist = await User.findOne({ where: { email } });
+      const userNameExist = await User.findOne({ where: { username } });
 
-      if (!!userExist || cpfExist) {
-        return res
-          .status(400)
-          .json({ error: { message: 'Usuário ja cadastrado.' } });
+      if (!!userExist || !!cpfExist || !!userNameExist) {
+        return res.status(400).json({
+          error: {
+            message: 'Usuário ja cadastrado tente outro nome ou cpf.',
+          },
+        });
       }
       const hash = bcrypt.hashSync(password, rounds);
 
@@ -38,10 +41,22 @@ class AuthController {
         bankinfoId: bank.id,
       });
       const token = generateJwt({ id: user.id });
+      await sendMail('create_user', {
+        email: user.email,
+        name: user.username,
+      });
+      await sendMail('verify_user', {
+        name: user.username,
+        token: user.token,
+        email: user.email,
+      });
 
       return res.status(201).json({ data: { user, token, bank, bio } });
     } catch (error) {
-      return res.status(500).json({ error: { message: 'error server' } });
+      console.log(error);
+      return res
+        .status(500)
+        .json({ error: { message: 'error server', error } });
     }
   }
   async index(req, res) {
@@ -83,6 +98,25 @@ class AuthController {
       const users = await User.findOne({ where: { id } });
       return res.status(200).json({ data: { users } });
     } catch (error) {
+      return res.status(500).json({ error: { message: 'error server' } });
+    }
+  }
+  async verify(req, res) {
+    try {
+      const { token } = req.params;
+      const user = await User.findOne({ where: { token } });
+
+      if (token === user.token) {
+        user.verify = true;
+
+        await user.save();
+
+        return res
+          .status(200)
+          .json({ data: { message: 'usuario agora é valido' } });
+      }
+    } catch (error) {
+      console.log(error);
       return res.status(500).json({ error: { message: 'error server' } });
     }
   }

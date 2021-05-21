@@ -1,9 +1,9 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
-const database = require("../config/db");
+const database = require('../config/db');
 
 const User = database.define(
-  "users",
+  'users',
   {
     id: {
       type: DataTypes.STRING,
@@ -29,13 +29,24 @@ const User = database.define(
       defaultValue: false,
       allowNull: false,
     },
+    verify: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    token: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV1,
+    },
     biographyId: DataTypes.UUID,
     bankinfoId: DataTypes.UUID,
   },
   {
     database,
-    modelName: "users",
-  }
+    modelName: 'users',
+  },
 );
 
 User.prototype.toJSON = function () {
@@ -52,16 +63,16 @@ User.prototype.toJSON = function () {
 };
 
 User.associate = (models) => {
-  User.hasMany(models.Arts, { foreignKey: "userId" });
+  User.hasMany(models.Arts, { foreignKey: 'userId' });
 };
 User.associate = function (models) {
   User.belongsTo(models.Biography, {
-    foreignKey: "bankinfoId",
-    as: "bankinfo",
+    foreignKey: 'bankinfoId',
+    as: 'bankinfo',
   });
   User.belongsTo(models.Biography, {
-    foreignKey: "biographyId",
-    as: "biography",
+    foreignKey: 'biographyId',
+    as: 'biography',
   });
 };
 

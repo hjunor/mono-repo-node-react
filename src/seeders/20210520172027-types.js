@@ -2,34 +2,34 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return await queryInterface.bulkInsert('categories', [
+    return await queryInterface.bulkInsert('types', [
       {
         id: 1,
-        name: 'Animais',
+        name: '100% Autoral',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 2,
-        name: 'Caveiras',
+        name: 'Editado',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 3,
-        name: 'Fashion',
+        name: 'Composição',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 4,
-        name: 'Figurativos',
+        name: 'Outros',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     ]);
   },
   down: async (queryInterface, Sequelize) => {
-    return await queryInterface.bulkDelete('categories', null, {});
+    return await queryInterface.bulkDelete('category', null, {});
   },
 };

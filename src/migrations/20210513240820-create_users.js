@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.createTable("users", {
+    return queryInterface.createTable('users', {
       id: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -34,13 +34,24 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
+      verify: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      token: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV1,
+      },
       biographyId: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV1,
         allowNull: false,
         references: {
-          model: "biographies",
-          key: "id",
+          model: 'biographies',
+          key: 'id',
         },
       },
       bankinfoId: {
@@ -48,8 +59,8 @@ module.exports = {
         defaultValue: Sequelize.UUIDV1,
         allowNull: false,
         references: {
-          model: "bankinfos",
-          key: "id",
+          model: 'bankinfos',
+          key: 'id',
         },
       },
       createdAt: {
@@ -64,6 +75,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("users ");
+    return queryInterface.dropTable('users ');
   },
 };

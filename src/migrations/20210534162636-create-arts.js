@@ -12,10 +12,25 @@ module.exports = {
       },
       userId: {
         type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV1,
         allowNull: false,
         references: {
           model: 'users',
+          key: 'id',
+        },
+      },
+      categoryId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'category',
+          key: 'id',
+        },
+      },
+      typesId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'types',
           key: 'id',
         },
       },
@@ -24,10 +39,6 @@ module.exports = {
         allowNull: false,
       },
       name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      types: {
         type: Sequelize.STRING,
         allowNull: false,
       },

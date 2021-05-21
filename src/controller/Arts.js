@@ -1,4 +1,6 @@
+const sendMail = require('../helpers/email');
 const Arts = require('../models/Arts');
+const Types = require('../models/Types');
 const User = require('../models/Users');
 const fileDelete = require('../validators/fileDelete');
 class ArtsContoller {
@@ -8,21 +10,34 @@ class ArtsContoller {
 
       const { id } = req;
 
-      const { name, types, exclusivity, description } = req.body;
+      const { name, typesId, exclusivity, description, categoryId } = req.body;
 
       const user = await User.findOne({ id });
+      const { id: types } = await Types.findOne({ id: typesId });
+      const { id: category } = await Types.findOne({ id: categoryId });
 
       if (!user) {
         return res
           .status(400)
           .json({ error: { message: 'Usuário não encontrado.' } });
       }
+      if (!typesId) {
+        return res
+          .status(400)
+          .json({ error: { message: 'Tipo não encontrado.' } });
+      }
+      if (!categoryId) {
+        return res
+          .status(400)
+          .json({ error: { message: 'Categoria não encontrada.' } });
+      }
 
       const art = await Arts.create({
         userId: user.id,
         image,
         name,
-        types,
+        typesId: types,
+        categoryId: category,
         exclusivity: !!exclusivity,
         description,
       });
@@ -32,7 +47,11 @@ class ArtsContoller {
           .json({ error: { message: 'Não foi possivel adicionar Arte.' } });
       }
       art.image = `http://localhost:3003/uploads/${art.image}`;
-
+      await sendMail('create_art', {
+        name: user.username,
+        email: user.email,
+        art: art.name,
+      });
       return res.json({
         data: {
           art,
@@ -43,47 +62,55 @@ class ArtsContoller {
     }
   }
   async indexAll(req, res) {
-    const { id } = req;
+    try {
+      const { id } = req;
 
-    const user = await User.findOne({ id });
+      const user = await User.findOne({ id });
 
-    if (!user) {
-      return res
-        .status(400)
-        .json({ error: { message: 'Arts de usuário não encontrado.' } });
+      if (!user) {
+        return res
+          .status(400)
+          .json({ error: { message: 'Arts de usuário não encontrado.' } });
+      }
+
+      const arts = await Arts.findAll({ where: { userId: id } });
+
+      const artsFile = arts.map((art) => {
+        art.image = `http://localhost:3003/uploads/${art.image}`;
+
+        return art;
+      });
+
+      return res.json({ data: { artsFile } });
+    } catch (error) {
+      return res.status(500).json({ error: { message: 'error no Servidor' } });
     }
-
-    const arts = await Arts.findAll({ where: { userId: id } });
-
-    const artsFile = arts.map((art) => {
-      art.image = `http://localhost:3003/uploads/${art.image}`;
-
-      return art;
-    });
-
-    return res.json({ data: { artsFile } });
   }
   async index(req, res) {
-    const { id: artsId } = req.params;
-    const { id } = req;
-    const user = await User.findOne({ id });
+    try {
+      const { id: artsId } = req.params;
+      const { id } = req;
+      const user = await User.findOne({ id });
 
-    if (!user) {
-      return res
-        .status(400)
-        .json({ error: { message: ' Arts de usuário não encontrado.' } });
+      if (!user) {
+        return res
+          .status(400)
+          .json({ error: { message: ' Arts de usuário não encontrado.' } });
+      }
+
+      const art = await Arts.findOne({ where: { id: artsId } });
+
+      if (!art) {
+        return res
+          .status(400)
+          .json({ error: { message: ' Arts de usuário não encontrado.' } });
+      }
+      art.image = `http://localhost:3003/uploads/${art.image}`;
+
+      return res.json({ data: { art } });
+    } catch (error) {
+      return res.status(500).json({ error: { message: 'error no Servidor' } });
     }
-
-    const art = await Arts.findOne({ where: { id: artsId } });
-
-    if (!art) {
-      return res
-        .status(400)
-        .json({ error: { message: ' Arts de usuário não encontrado.' } });
-    }
-    art.image = `http://localhost:3003/uploads/${art.image}`;
-
-    return res.json({ data: { art } });
   }
   async update(req, res) {
     try {
@@ -92,9 +119,18 @@ class ArtsContoller {
       const { id } = req.params;
       const { body } = req;
 
+      console.log(body);
+
       body.exclusivity = !!body.exclusivity;
 
-      const fields = ['name', 'types', 'exclusivity', 'image', 'description'];
+      const fields = [
+        'name',
+        'typesId',
+        'exclusivity',
+        'image',
+        'description',
+        'categoryId',
+      ];
 
       const art = await Arts.findOne({ id });
 
@@ -132,6 +168,31 @@ class ArtsContoller {
           .status(500)
           .json({ error: { message: 'error no Servidor' } });
       }
+      return res.status(500).json({ error: { message: 'error no Servidor' } });
+    }
+  }
+  async updateOne(req, res) {
+    try {
+      const { id } = req.params;
+
+      const art = await Arts.findOne({ id });
+      const user = await User.findOne({ id: art.userId });
+      console.log(art);
+
+      art.aproved = true;
+
+      await art.save();
+
+      await sendMail('aproved_art', {
+        name: user.username,
+        email: user.email,
+        art: art.name,
+      });
+
+      return res
+        .status(200)
+        .json({ error: { message: 'Aprovado com sucesso' } });
+    } catch (error) {
       return res.status(500).json({ error: { message: 'error no Servidor' } });
     }
   }

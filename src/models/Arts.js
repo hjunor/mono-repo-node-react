@@ -17,13 +17,18 @@ const Arts = database.define(
       defaultValue: DataTypes.UUIDV1,
       allowNull: false,
     },
+    typesId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    categoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     image: {
       type: DataTypes.STRING,
     },
     name: {
-      type: DataTypes.STRING,
-    },
-    types: {
       type: DataTypes.STRING,
     },
     exclusivity: {
