@@ -58,6 +58,13 @@ class ArtsContoller {
         },
       });
     } catch (error) {
+      const file = await fileDelete(req.file.filename);
+
+      if (!file) {
+        return res
+          .status(500)
+          .json({ error: { message: 'error no Servidor' } });
+      }
       return res.status(500).json({ error: { message: 'error no Servidor' } });
     }
   }
