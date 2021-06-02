@@ -11,7 +11,7 @@ class ArtsContoller {
       const { id } = req;
 
       const { name, typesId, exclusivity, description, categoryId } = req.body;
-
+      console.log(exclusivity);
       const user = await User.findOne({ id });
       const { id: types } = await Types.findOne({ id: typesId });
       const { id: category } = await Types.findOne({ id: categoryId });
@@ -38,7 +38,7 @@ class ArtsContoller {
         name,
         typesId: types,
         categoryId: category,
-        exclusivity: !!exclusivity,
+        exclusivity: exclusivity,
         description,
       });
       if (!art) {
@@ -65,6 +65,7 @@ class ArtsContoller {
           .status(500)
           .json({ error: { message: 'error no Servidor' } });
       }
+      console.log(error);
       return res.status(500).json({ error: { message: 'error no Servidor' } });
     }
   }
@@ -88,7 +89,7 @@ class ArtsContoller {
         return art;
       });
 
-      return res.json({ data: { artsFile } });
+      return res.json(artsFile);
     } catch (error) {
       return res.status(500).json({ error: { message: 'error no Servidor' } });
     }

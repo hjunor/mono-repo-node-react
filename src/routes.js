@@ -12,6 +12,7 @@ const ArtsController = require('./controller/Arts');
 const CategoryController = require('./controller/Category');
 const TypesController = require('./controller/Types');
 const adminCheck = require('./middlewares/adminCheck');
+const { response } = require('express');
 
 router.post('/sign-up', accountSingUp, AuthController.create);
 router.get('/', checkJwt, AuthController.store);
@@ -25,6 +26,13 @@ router.get('/arts', checkJwt, ArtsController.indexAll);
 router.get('/arts/:id', checkJwt, ArtsController.index);
 router.delete('/arts/:id', checkJwt, ArtsController.destroy);
 router.patch('/arts/:id', checkJwt, adminCheck, ArtsController.updateOne);
+
+router.get('/token', checkJwt, (req, res) => {
+  return res.status(200).json({ token: true });
+});
+router.get('/admin', checkJwt, adminCheck, (req, res) => {
+  return res.status(200).json({ token: true });
+});
 
 router.put(
   '/arts/:id',

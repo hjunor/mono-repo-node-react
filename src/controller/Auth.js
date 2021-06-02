@@ -51,7 +51,7 @@ class AuthController {
         email: user.email,
       });
 
-      return res.status(201).json({ data: { user, token, bank, bio } });
+      return res.status(201).json({ token, bank, bio });
     } catch (error) {
       console.log(error);
       return res
@@ -62,12 +62,21 @@ class AuthController {
   async index(req, res) {
     try {
       const { email, password } = req.body;
+
+      console.log(email);
       const user = await User.findOne({ where: { email } });
 
       if (!user) {
         return res
           .status(400)
           .json({ error: { message: 'Usuário não cadastrado.' } });
+      }
+      if (!user.verify) {
+        return res.status(400).json({
+          error: {
+            message: 'Conta não confirmada!',
+          },
+        });
       }
 
       const { bankinfoId, biographyId } = user;
@@ -87,8 +96,9 @@ class AuthController {
         bank: bank.id,
       });
 
-      return res.status(200).json({ data: { user, token, biography, bank } });
+      return res.status(200).json({ user, token, biography, bank });
     } catch (error) {
+      console.log(error);
       return res.status(500).json({ error: { message: 'error server' } });
     }
   }
