@@ -51,7 +51,9 @@ class AuthController {
         email: user.email,
       });
 
-      return res.status(201).json({ token, bank, bio });
+      return res
+        .status(201)
+        .json({ data: 'Verifique o email e confirme a conta!' });
     } catch (error) {
       console.log(error);
       return res

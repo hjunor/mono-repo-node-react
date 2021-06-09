@@ -81,7 +81,25 @@ class ArtsContoller {
           .json({ error: { message: 'Arts de usuário não encontrado.' } });
       }
 
-      const arts = await Arts.findAll({ where: { userId: id } });
+      const arts = await Arts.findAll({
+        where: { userId: id },
+        order: [['createdAt', 'DESC']],
+      });
+
+      const artsFile = arts.map((art) => {
+        art.image = `http://localhost:3003/uploads/${art.image}`;
+
+        return art;
+      });
+
+      return res.json(artsFile);
+    } catch (error) {
+      return res.status(500).json({ error: { message: 'error no Servidor' } });
+    }
+  }
+  async indexAllAdmin(req, res) {
+    try {
+      const arts = await Arts.findAll({ order: [['createdAt', 'DESC']] });
 
       const artsFile = arts.map((art) => {
         art.image = `http://localhost:3003/uploads/${art.image}`;
@@ -183,23 +201,46 @@ class ArtsContoller {
     try {
       const { id } = req.params;
 
-      const art = await Arts.findOne({ id });
-      const user = await User.findOne({ id: art.userId });
+      const { aproved, reason } = req.body;
+
+      const art = await Arts.findByPk(id);
       console.log(art);
+      const user = await User.findOne({ id: art.userId });
 
-      art.aproved = true;
+      art.aproved = aproved;
 
+      if (reason) {
+        art.reason = reason;
+      }
+
+      if (art.aproved === true) {
+        art.reason = null;
+      }
       await art.save();
 
-      await sendMail('aproved_art', {
-        name: user.username,
-        email: user.email,
-        art: art.name,
-      });
+      if (art.aproved === true) {
+        await sendMail('aproved_art', {
+          reason: art.reason,
+          status: 'Aprovada',
+          name: user.username,
+          email: user.email,
+          art: art.name,
+        });
+      }
+
+      if (art.aproved === false) {
+        await sendMail('aproved_art', {
+          reason: art.reason,
+          status: 'Reprovada',
+          name: user.username,
+          email: user.email,
+          art: art.name,
+        });
+      }
 
       return res
         .status(200)
-        .json({ error: { message: 'Aprovado com sucesso' } });
+        .json({ data: { message: 'modificado com sucesso', art } });
     } catch (error) {
       return res.status(500).json({ error: { message: 'error no Servidor' } });
     }

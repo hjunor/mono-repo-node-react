@@ -25,7 +25,7 @@ router.get('/types/:id', TypesController.index);
 router.get('/arts', checkJwt, ArtsController.indexAll);
 router.get('/arts/:id', checkJwt, ArtsController.index);
 router.delete('/arts/:id', checkJwt, ArtsController.destroy);
-router.patch('/arts/:id', checkJwt, adminCheck, ArtsController.updateOne);
+router.put('/arts/:id', checkJwt, adminCheck, ArtsController.updateOne);
 
 router.get('/token', checkJwt, (req, res) => {
   return res.status(200).json({ token: true });
@@ -33,6 +33,7 @@ router.get('/token', checkJwt, (req, res) => {
 router.get('/admin', checkJwt, adminCheck, (req, res) => {
   return res.status(200).json({ token: true });
 });
+router.get('/admin/arts', checkJwt, adminCheck, ArtsController.indexAllAdmin);
 
 router.put(
   '/arts/:id',

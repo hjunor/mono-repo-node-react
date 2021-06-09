@@ -26,7 +26,6 @@ async function sendMail(type, data) {
         to: 'junorbazas@gmail.com',
         from: 'hjunor@gmail.com',
         subject: 'Novo usuário criado.',
-        text: 'and easy to do anywhere, even with Node.js',
         html: HTML_USER_CREATE(data),
       };
       break;
@@ -50,8 +49,7 @@ async function sendMail(type, data) {
       msg = {
         to: email,
         from: 'hjunor@gmail.com',
-        subject: 'Arte aprovada!!!',
-        text: 'and easy to do anywhere, even with Node.js',
+        subject: 'Arte Avaliada!!!',
         html: HTML_APROVED_USER(data),
       };
       break;

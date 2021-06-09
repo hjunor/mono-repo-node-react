@@ -22,7 +22,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'category',
+          model: 'categories',
           key: 'id',
         },
       },
@@ -50,9 +50,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      reason: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       aproved: {
         type: Sequelize.BOOLEAN,
         allowNull: true,
+        defaultValue: null,
       },
       createdAt: {
         allowNull: false,

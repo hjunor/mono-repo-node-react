@@ -334,7 +334,7 @@ module.exports = (data) => {
       </style>
     </head>
     <body class="">
-      <span class="preheader">Sua Arte foi Aprovada.</span>
+      <span class="preheader">Sua Arte foi Avaliada!.</span>
       <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
         <tr>
           <td>&nbsp;</td>
@@ -351,7 +351,8 @@ module.exports = (data) => {
                       <tr>
                         <td>
                           <p>Olá ${data.name},</p>
-                          <p>Sua Arte ${data.art} foi aprovada!.</p>
+                          <p>Sua Arte ${data.art} foi ${data.status}!.</p>
+                          ${data?.reason ? `motivo: ${data.reason}` : ''}
                         </td>
                       </tr>
                     </table>

@@ -31,6 +31,10 @@ const Arts = database.define(
     name: {
       type: DataTypes.STRING,
     },
+    reason: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     exclusivity: {
       type: DataTypes.BOOLEAN,
     },
@@ -39,7 +43,7 @@ const Arts = database.define(
     },
     aproved: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      defaultValue: null,
     },
   },
   {
