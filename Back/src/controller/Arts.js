@@ -10,9 +10,12 @@ class ArtsContoller {
 
       const { id } = req;
 
+      console.log(id);
+
       const { name, typesId, exclusivity, description, categoryId } = req.body;
       console.log(exclusivity);
-      const user = await User.findOne({ id });
+      const user = await User.findByPk(id);
+      console.log(user.id);
       const { id: types } = await Types.findOne({ id: typesId });
       const { id: category } = await Types.findOne({ id: categoryId });
 
@@ -73,13 +76,15 @@ class ArtsContoller {
     try {
       const { id } = req;
 
-      const user = await User.findByPk(id);
+      const user = await User.findOne({ id });
 
       if (!user) {
         return res
           .status(400)
           .json({ error: { message: 'Arts de usuário não encontrado.' } });
       }
+
+      console.log(id);
 
       const arts = await Arts.findAll({
         where: { userId: id },
