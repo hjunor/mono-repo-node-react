@@ -46,7 +46,7 @@ class ArtsContoller {
           .status(400)
           .json({ error: { message: 'Não foi possivel adicionar Arte.' } });
       }
-      art.image = `http://localhost:3003/uploads/${art.image}`;
+      art.image = `http://18.230.20.5:3003:3003/uploads/${art.image}`;
       await sendMail('create_art', {
         name: user.username,
         email: user.email,
@@ -87,7 +87,7 @@ class ArtsContoller {
       });
 
       const artsFile = arts.map((art) => {
-        art.image = `http://localhost:3003/uploads/${art.image}`;
+        art.image = `http://18.230.20.5:3003/uploads/${art.image}`;
 
         return art;
       });
@@ -102,7 +102,7 @@ class ArtsContoller {
       const arts = await Arts.findAll({ order: [['createdAt', 'DESC']] });
 
       const artsFile = arts.map((art) => {
-        art.image = `http://localhost:3003/uploads/${art.image}`;
+        art.image = `http://18.230.20.5:3003/uploads/${art.image}`;
 
         return art;
       });
@@ -131,7 +131,7 @@ class ArtsContoller {
           .status(400)
           .json({ error: { message: ' Arts de usuário não encontrado.' } });
       }
-      art.image = `http://localhost:3003/uploads/${art.image}`;
+      art.image = `http://18.230.20.5:3003/uploads/${art.image}`;
 
       return res.json({ data: { art } });
     } catch (error) {
@@ -183,7 +183,7 @@ class ArtsContoller {
 
       await art.save();
 
-      art.image = `http://localhost:3003/uploads/${art.image}`;
+      art.image = `http://18.230.20.5:3003/uploads/${art.image}`;
 
       return res.json({ data: { art } });
     } catch (error) {

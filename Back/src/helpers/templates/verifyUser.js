@@ -360,7 +360,7 @@ module.exports = (data) => {
                                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                     <tbody>
                                       <tr>
-                                        <td> <a href="http://localhost:3003/verify/${token}" target="_blank">Ativar conta</a> </td>
+                                        <td> <a href="http://18.230.20.5:3003/verify/${token}" target="_blank">Ativar conta</a> </td>
                                       </tr>
                                     </tbody>
                                   </table>

@@ -15,7 +15,7 @@ async function sendMail(type, data) {
   switch (type) {
     case 'create_art':
       msg = {
-        to: 'junorbazas@gmail.com',
+        to: email,
         from: 'hjunor@gmail.com',
         subject: 'Arte criada',
         html: HTML_ART_CREATE(data),
@@ -23,7 +23,7 @@ async function sendMail(type, data) {
       break;
     case 'create_user':
       msg = {
-        to: 'junorbazas@gmail.com',
+        to: email,
         from: 'hjunor@gmail.com',
         subject: 'Novo usuário criado.',
         html: HTML_USER_CREATE(data),

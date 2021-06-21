@@ -43,7 +43,7 @@ class BiographyController {
 
       await bio.save();
 
-      bio.photo = `http://localhost:3003/profile/${bio.photo}`;
+      bio.photo = `http://18.230.20.5:3003/profile/${bio.photo}`;
 
       return res.json({ data: { bio } });
     } catch (error) {
