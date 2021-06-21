@@ -73,7 +73,7 @@ class ArtsContoller {
     try {
       const { id } = req;
 
-      const user = await User.findOne({ id });
+      const user = await User.findByPk(id);
 
       if (!user) {
         return res

@@ -8,7 +8,7 @@ function Arts() {
   const { artList, art } = useContext(UserContext);
   useEffect(() => {
     artList();
-  });
+  }, []);
   return (
     <Container>
       {art &&
