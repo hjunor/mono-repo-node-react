@@ -2,12 +2,11 @@
   "name": "projetoartista",
   "version": "1.0.0",
   "main": "index.js",
-  "private": true,
   "repository": "git@github.com:ferrarimga/projetoartista.git",
   "author": "Heberth Junor <hjunor@gmail.com>",
   "license": "MIT",
-  "workspaces": [
-    "back",
-    "front"
-  ]
+  "workspaces": {
+    "back": "Back*/",
+    "front": "Front*/"
+  }
 }
