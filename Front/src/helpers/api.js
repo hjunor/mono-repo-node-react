@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getToken } from './token';
 
 export const getApiUrl = (path) => {
-  return `http://localhost:3003${path}`;
+  return `http://18.230.20.5:3003${path}`;
 };
 
 export const getheaders = () => {
