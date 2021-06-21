@@ -1,0 +1,59 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    image: nodejs
+    container_name: nodejs
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - PORT=$PORT
+      - DB_USER=$DB_USER
+      - DB_PASS=$DB_PASS
+      - DB_NAME=$DB_NAME
+      - DB_HOST=db
+      - JWT_PRIVATE_KEY=$JWT_PRIVATE_KEY
+      - MAIL_KEY=$MAIL_KEY
+      - MAIL=$MAIL
+
+    ports:
+      - '3003:3003'
+      - '3603:3603'
+    volumes:
+      - .:/urs/app
+      - node_modules:/urs/app/node_modules
+    networks:
+      - app-network
+    links:
+      - db
+
+  db:
+    container_name: 'database-node'
+    image: mysql:5.7.31
+    command: --default-authentication-plugin=mysql_native_password --sql_mode=NO_ENGINE_SUBSTITUTION,NO_AUTO_CREATE_USER --explicit_defaults_for_timestamp
+    restart: always
+    ports:
+      - '3306:3306'
+    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=dev
+      - MYSQL_USER=dev
+      - MYSQL_PASSWORD=123
+      - TZ=America/Sao_Paulo
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+  node_modules:
