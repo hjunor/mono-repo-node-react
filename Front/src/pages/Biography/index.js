@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { UserContext } from '../../store/userContext';
 
 import { Container } from './styles';
@@ -11,7 +12,9 @@ function Biography() {
       <div className="card">
         <img src="" alt="profile" />
         <div>Name: {user.username}</div>
-        <div>Facebook:{bio.facebook}</div>
+        <div style={bio.facebook ? { opacity: 1 } : { opacity: 0.4 }}>
+          Facebook:{bio.facebook ? bio.facebook : '   null'}
+        </div>
         <div>Instagram:</div>
         <div>Data:</div>
         <div>Portifolio:</div>
@@ -19,14 +22,14 @@ function Biography() {
 
       <div className="card">
         <div>Conta: {user.username}</div>
-        <div>Agencia:{bio.facebook}</div>
+        <div>Agencia:{bio.facebook ? bio.facebook : '  null'}</div>
         <div>doc:</div>
         <div>Nome:</div>
         <div>Proprietario:</div>
         <div>Tipo:</div>
       </div>
 
-      <button>editar</button>
+      <Link to="/conta/biografia/editar">Editar</Link>
     </Container>
   );
 }

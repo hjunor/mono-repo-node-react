@@ -5,7 +5,8 @@ import { UserContext } from '../../../store/userContext';
 import { Container, StylesTitle, StylesButton, StylesLink } from '../styles';
 
 export default function FormSignUp() {
-  const { userCreate, error, message, setError } = useContext(UserContext);
+  const { userCreate, error, message, setError, loading } =
+    useContext(UserContext);
 
   const username = useForm();
   const password = useForm('password');
@@ -39,7 +40,18 @@ export default function FormSignUp() {
           name="password"
           {...password_confirmation}
         />
-        <StylesButton type="submit">criar</StylesButton>
+        {loading ? (
+          <StylesButton
+            style={{ cursor: 'wait', opacity: 0.3 }}
+            disabled
+            type="submit"
+          >
+            Aguarde
+          </StylesButton>
+        ) : (
+          <StylesButton type="submit">criar</StylesButton>
+        )}
+
         {error && <h1 style={{ color: '#cb567a' }}>{error.signUp}</h1>}
         {message && (
           <h1 style={{ color: '#56b5d0', marginTop: '30px' }}>

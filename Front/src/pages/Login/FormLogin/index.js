@@ -6,7 +6,8 @@ import { UserContext } from '../../../store/userContext';
 import { Container, StylesTitle, StylesButton, StylesLink } from '../styles';
 
 export default function FormLogin() {
-  const { userLogin, error, login, setError } = useContext(UserContext);
+  const { userLogin, error, login, setError, loading } =
+    useContext(UserContext);
 
   const email = useForm('email');
   const password = useForm();
@@ -30,7 +31,17 @@ export default function FormLogin() {
         <form onSubmit={handleSubmit}>
           <Input label="email" type="email" name="email" {...email} />
           <Input label="senha" type="password" name="password" {...password} />
-          <StylesButton type="submit">Entrar</StylesButton>
+          {loading ? (
+            <StylesButton
+              style={{ cursor: 'wait', opacity: 0.3 }}
+              disabled
+              type="submit"
+            >
+              Aguarde
+            </StylesButton>
+          ) : (
+            <StylesButton type="submit">Entrar</StylesButton>
+          )}
           {error && (
             <h1 style={{ color: '#cb567a', marginTop: '30px' }}>
               {error.login}

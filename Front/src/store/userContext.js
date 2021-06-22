@@ -56,6 +56,43 @@ export const UserStorage = ({ children }) => {
     }
   }
 
+  async function bioPost(body) {
+    try {
+      setLoading(true);
+      const data = await apiUpload('/biography', body);
+      console.log(data);
+      if (data) navigate('/conta/biografia');
+    } catch (error) {
+      if (error.response?.data) {
+        setError('Error');
+      }
+      const { data } = error.response;
+
+      setError(data.error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function bankPost(body) {
+    try {
+      setLoading(true);
+      const data = await apiUpload('/bank', body);
+
+      console.log(data);
+      if (data) navigate('/conta/biografia');
+    } catch (error) {
+      if (error.response?.data) {
+        setError('Error');
+      }
+      const { data } = error.response;
+
+      setError(data.error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   async function artList() {
     try {
       setLoading(true);
@@ -172,6 +209,7 @@ export const UserStorage = ({ children }) => {
         setArt,
         setError,
         userLogin,
+        loading,
         error,
         login,
         userLogout,
@@ -184,6 +222,8 @@ export const UserStorage = ({ children }) => {
         message,
         bio,
         bank,
+        bankPost,
+        bioPost,
       }}
     >
       {children}
