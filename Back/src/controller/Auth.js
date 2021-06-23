@@ -91,7 +91,7 @@ class AuthController {
       if (!match) {
         return res.status(400).json({ error: { message: 'Senha incorreta' } });
       }
-      biography.photo = `http://18.230.20.5:3003:3003/profile/${biography.photo}`;
+      biography.photo = `http://18.230.20.5:3003/profile/${biography.photo}`;
       const token = generateJwt({
         id: user.id,
         biography: biography.id,
