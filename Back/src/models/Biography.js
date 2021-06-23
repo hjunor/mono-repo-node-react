@@ -1,9 +1,9 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 
-const database = require("../config/db");
+const database = require('../config/db');
 
 const Biography = database.define(
-  "biographies",
+  'biographies',
   {
     id: {
       type: DataTypes.STRING,
@@ -24,6 +24,10 @@ const Biography = database.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    resumer: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     instagram: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -35,8 +39,8 @@ const Biography = database.define(
   },
   {
     database,
-    modelName: "biographies",
-  }
+    modelName: 'biographies',
+  },
 );
 
 Biography.prototype.toJSON = function () {
@@ -48,7 +52,7 @@ Biography.prototype.toJSON = function () {
   return values;
 };
 Biography.associate = function (models) {
-  Biography.hasMany(models.User, { as: "biography" });
+  Biography.hasMany(models.User, { as: 'biography' });
 };
 
 module.exports = Biography;

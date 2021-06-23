@@ -8,9 +8,9 @@ class BankinfoController {
 
       const fields = ['name', 'type', 'agency', 'account', 'owner', 'doc'];
 
-      const { bankinfoId } = await User.findOne({ id });
+      const { bankinfoId } = await User.findByPk(id);
 
-      const bank = await Bankinfo.findOne({ bankinfoId });
+      const bank = await Bankinfo.findByPk(bankinfoId);
 
       if (!bank)
         return res

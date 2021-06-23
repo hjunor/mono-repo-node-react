@@ -17,7 +17,7 @@ class BiographyController {
         'birthDate',
         'instagram',
         'facebook',
-        'portfolioLink',
+        'portifolioLink',
       ];
 
       const { biographyId } = await User.findOne({ id });
