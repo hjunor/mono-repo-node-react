@@ -1,9 +1,18 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const Container = styled.div`
   margin: 0 auto;
   width: 80%;
   height: 100vh;
+  display: flex;
+  justify-content: center;
+
+  img {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+  }
 
   button {
     border-radius: 8px;
@@ -17,20 +26,23 @@ export const Container = styled.div`
     width: 100px;
   }
 
-  .card {
+  .cardBio {
     border-radius: 8px;
     padding: 30px;
     margin-top: 30px;
     background: #202020;
     width: 100%;
-    height: 22rem;
+    height: 30rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 
     img {
       margin: 0 auto;
     }
 
     div {
-      margin: 20px;
+      margin: 10px;
       background: #303030;
       height: 30px;
       display: flex;
@@ -38,5 +50,42 @@ export const Container = styled.div`
       padding: 5px;
       border-radius: 10px;
     }
+  }
+  .cardBank {
+    border-radius: 8px;
+    padding: 30px;
+    margin-top: 30px;
+    margin-left: 30px;
+    background: #202020;
+    width: 100%;
+    height: 30rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    div {
+      margin: 0 0 20px 0;
+      background: #303030;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      padding: 5px;
+      border-radius: 10px;
+    }
+  }
+`;
+
+export const ButtonLink = styled(Link)`
+  width: 4rem;
+  height: 2rem;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 0 0.5rem;
+  cursor: pointer;
+
+  :hover {
+    opacity: 0.8;
   }
 `;

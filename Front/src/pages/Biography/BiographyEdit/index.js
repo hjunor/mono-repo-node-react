@@ -7,7 +7,7 @@ import { Container, Input } from './styles';
 
 function BiographyEdit() {
   const { bio, bank, user, bankPost, bioPost } = useContext(UserContext);
-
+  console.log(bio);
   const [img, setImg] = useState(null);
 
   function handleImgChange({ target }) {
@@ -31,10 +31,9 @@ function BiographyEdit() {
     upload.append('bithDate', data.bithDate);
     upload.append('portifolioLink', data.portifolioLink);
     upload.append('resumer', data.resumer);
+    upload.append('file', img.raw, img.raw.name);
 
-    upload.append('photo', img.raw, img.raw.name);
     bioPost(upload);
-    console.log(upload);
   }
 
   function handleSubmitBank(e) {
@@ -43,125 +42,113 @@ function BiographyEdit() {
 
     const data = Object.fromEntries(formData);
 
-    const upload = new FormData();
-    upload.append('name', data.name);
-    upload.append('agency', data.agency);
-    upload.append('account', data.account);
-    upload.append('owner', data.owner);
-    upload.append('type', data.type);
-    upload.append('doc', data.doc);
-
-    bankPost(upload);
-
-    console.log(upload);
+    bankPost({
+      name: data.name ? data.name : bank.name,
+      type: data.type ? data.type : bank.type,
+      agency: data.agency ? data.agency : bank.agency,
+      account: data.account ? data.account : bank.account,
+      owner: data.owner ? data.owner : bank.owner,
+      doc: data.doc ? data.doc : bank.doc,
+    });
   }
 
   return (
     <Container>
       <form className="card" onSubmit={handleSubmitBio}>
-        <img src={bio.photo ? bio.photo : profile} alt="profile" />
+        <img src={bio?.photo ? bio.photo : profile} alt="profile" />
         <label>{user.username}</label>
         <Input
-          value={bio.photo}
           width="90%"
           height="12px"
           name="photo"
           type="file"
-          placeholder="Photo de perfil"
+          placeholder={bio?.photo ? bio.photo : 'Photo de perfil'}
           onChange={handleImgChange}
         />
         <Input
-          value={bio.facebook}
           width="90%"
           height="12px"
           name="facebook"
           type="text"
-          placeholder="Facebook"
+          placeholder={bio?.facebook ? bio.facebook : 'Facebook'}
         />
         <Input
-          value={bio.instagram}
           width="90%"
           height="12px"
           name="instagram"
           type="text"
-          placeholder="Instagram"
-        />{' '}
+          placeholder={bio?.instagram ? bio.instagram : 'Instagram'}
+        />
         <Input
-          value={bio.bithDate}
+          value={bio?.bithDate && bio.bithDate}
           width="90%"
           height="12px"
           name="bithDate"
           type="date"
-          placeholder="Data de aniversario"
+          placeholder={bio?.bithDate ? bio.bithDate : 'Data de aniversario'}
         />
         <Input
-          value={bio.portifolioLink}
           width="90%"
           height="12px"
           name="portifolioLink"
           type="text"
-          placeholder="Link Portfólio"
+          placeholder={
+            bio?.portifolioLink ? bio.portifolioLink : 'Link Portfólio'
+          }
         />
         <Input
-          value={bio.portifolioLink}
           width="90%"
           height="12px"
           name="resumer"
           type="text"
-          placeholder="Me diga mais sobre você!"
+          placeholder={bio?.resumer ? bio.resumer : 'Me diga mais sobre você!'}
         />
         <button type="submit">enviar</button>
       </form>
       <form className="card" onSubmit={handleSubmitBank}>
         <label htmlFor="bank">Informações Bancarias</label>
         <Input
-          value={bank.name}
           id="bank"
           width="90%"
           height="12px"
           name="name"
           type="text"
-          placeholder="Banco"
-        />{' '}
+          placeholder={bank?.name ? bank.name : 'Banco'}
+        />
         <Input
-          value={bank.agency}
           width="90%"
           height="12px"
           name="agency"
           type="text"
-          placeholder="Agencia"
-        />{' '}
+          placeholder={bank?.agency ? bank.agency : 'Agência'}
+        />
         <Input
-          value={bank.account}
           width="90%"
           height="12px"
           name="account"
           type="text"
-          placeholder="Número da conta"
-        />{' '}
+          placeholder={bank?.account ? bank.account : 'Número da conta'}
+        />
         <Input
-          value={bank.owner}
           width="90%"
           height="12px"
           name="owner"
           type="text"
-          placeholder="Proprietario"
-        />{' '}
+          placeholder={bank?.owner ? bank.owner : 'Proprietario'}
+        />
         <Input
-          value={bank.type}
           width="90%"
           height="12px"
           name="type"
           type="text"
-          placeholder="Tipo"
+          placeholder={bank?.type ? bank.type : 'Tipo'}
         />
         <Input
-          value={bank.doc}
           width="90%"
           height="12px"
           name="doc"
           type="text"
-          placeholder="Doc"
+          placeholder={bank?.doc ? bank.doc : 'Doc'}
         />
         <button type="submit">enviar</button>
       </form>

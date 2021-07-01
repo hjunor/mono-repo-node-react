@@ -59,35 +59,30 @@ export const UserStorage = ({ children }) => {
   async function bioPost(body) {
     try {
       setLoading(true);
-      const data = await apiUpload('/biography', body);
-      console.log(data);
-      if (data) navigate('/conta/biografia');
-    } catch (error) {
-      if (error.response?.data) {
-        setError('Error');
-      }
-      const { data } = error.response;
+      const { data: response } = await apiPost('/biography', body);
+      const { bio } = response.data;
 
-      setError(data.error.message);
+      console.log(bio);
+      setBio(bio);
+      if (response) navigate('/conta/biografia');
+    } catch (error) {
+      setError('Não foi possivel atualizar seus dados.');
     } finally {
       setLoading(false);
     }
   }
 
   async function bankPost(body) {
+    console.log(body);
     try {
       setLoading(true);
-      const data = await apiUpload('/bank', body);
+      const { data: response } = await apiPost('/bank', body);
+      const { bank } = response.data;
 
-      console.log(data);
-      if (data) navigate('/conta/biografia');
+      setBank(bank);
+      if (response) navigate('/conta/biografia');
     } catch (error) {
-      if (error.response?.data) {
-        setError('Error');
-      }
-      const { data } = error.response;
-
-      setError(data.error.message);
+      setError('Não foi possivel atualizar seus dados.');
     } finally {
       setLoading(false);
     }
@@ -100,7 +95,7 @@ export const UserStorage = ({ children }) => {
 
       setArt(data);
     } catch (error) {
-      if (error.response?.data) {
+      if (error?.response?.data) {
         setError('Error');
       }
       const { data } = error.response;
